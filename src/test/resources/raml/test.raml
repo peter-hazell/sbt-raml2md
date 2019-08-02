@@ -1,0 +1,27 @@
+#%RAML 1.0
+title: Test API
+version: 1.0
+protocols: [ HTTPS ]
+baseUri: https://test.com
+
+mediaType: [ application/json ]
+
+/test-api/testing/test-resource/{id}:
+  uriParameters:
+    id:
+      description: A test URI parameter
+      type: string
+      example: ABC123
+  get:
+    displayName: Get test value
+    description: An endpoint to get some test data
+    queryParameters:
+      testId:
+        type: string
+        required: true
+    responses:
+      200:
+        body:
+          application/json:
+            type: !include schemas/test-get-schema.json
+            example: !include examples/test-get-example.json

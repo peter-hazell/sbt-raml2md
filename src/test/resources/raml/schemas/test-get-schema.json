@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "description": "Schema for the response to the test GET endpoint",
+  "properties": {
+    "testValue": {
+      "type": "number",
+      "description": "A test value that is returned in the response"
+    }
+  },
+  "required": [
+    "testValue"
+  ]
+}

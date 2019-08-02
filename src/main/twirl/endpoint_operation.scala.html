@@ -1,0 +1,89 @@
+@import amf.client.model.domain.{EndPoint, NodeShape, Operation, Parameter, Payload, Response}
+@(endpoint: EndPoint, operation: Operation)
+
+<html>
+    <body>
+        <h1>@operation.name</h1>
+        @operation.description
+
+        <h2>Request</h2>
+        <h4>Endpoint</h4>
+        <blockquote>@operation.method.value().toUpperCase @endpoint.path</blockquote>
+
+        @if(operation.request != null) {
+            @if(!operation.request.queryParameters.isEmpty) {
+                <h4>Query Parameters</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Required</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @for(queryParam: Parameter <- operation.request.queryParameters) {
+
+                        <tr>
+                            <td>@queryParam.name</td>
+                            <td>@if(!queryParam.description.isNullOrEmpty) {
+                                @queryParam.description
+                            }</td>
+                            <td>@{
+                                if(queryParam.required.value()) "Yes" else "No"
+                            }</td>
+                        </tr>
+
+                    }
+                    </tbody>
+                </table>
+            }
+        }
+
+        @if(!endpoint.parameters.isEmpty) {
+            <h4>URI Parameters</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @for(uriParam: Parameter <- endpoint.parameters) {
+
+                    <tr>
+                        <td>@uriParam.name</td>
+                        <td>@if(!uriParam.description.isNullOrEmpty) {
+                            @uriParam.description
+                        }</td>
+                    </tr>
+
+                }
+                </tbody>
+            </table>
+        }
+
+        @if(operation.request != null) {
+            @for(requestBody: Payload <- operation.request.payloads) {
+                @if(requestBody.schema.isInstanceOf[NodeShape]) {
+                    <h4>JSON Body Schema</h4>
+                    <pre>@requestBody.schema.asInstanceOf[NodeShape].toJsonSchema</pre>
+                }
+            }
+        }
+
+        <h2>Responses</h2>
+        @for(response: Response <- operation.responses) {
+            <h4>HTTP Status: @response.statusCode</h4>
+
+            @for(responseBody: Payload <- response.payloads) {
+                @if(responseBody.schema.isInstanceOf[NodeShape]) {
+                    <p><strong>JSON Body Schema</strong></p>
+                    <pre>@responseBody.schema.asInstanceOf[NodeShape].toJsonSchema</pre>
+                }
+            }
+        }
+    </body>
+</html>
+

@@ -1,0 +1,37 @@
+@import java.time.LocalDate
+@import amf.client.model.domain.WebApi
+@import amf.client.model.domain.EndPoint
+@import amf.client.model.domain.Operation
+@import amf.client.model.domain.Parameter
+@import amf.client.model.domain.Example
+@import amf.client.model.domain.Response
+@import amf.client.model.domain.Payload
+@import amf.client.model.domain.NodeShape
+@(api: WebApi)
+
+<html>
+    <body>
+        <h1>@api.name</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Action</th>
+                    <th>Method</th>
+                    <th>Endpoint</th>
+                </tr>
+            </thead>
+            <tbody>
+            @for(endpoint: EndPoint <- api.endPoints) {
+                @for(operation: Operation <- endpoint.operations) {
+                    <tr>
+                        <td>@operation.name</td>
+                        <td>@operation.method.value().toUpperCase</td>
+                        <td>@endpoint.path</td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </body>
+</html>
+
