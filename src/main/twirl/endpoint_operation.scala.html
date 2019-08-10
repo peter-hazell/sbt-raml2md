@@ -1,4 +1,4 @@
-@import amf.client.model.domain.{EndPoint, NodeShape, Operation, Parameter, Payload, Response}
+@import amf.client.model.domain.{EndPoint, Example, NodeShape, Operation, Parameter, Payload, Response, ScalarShape}
 @(endpoint: EndPoint, operation: Operation)
 
 <html>
@@ -18,22 +18,28 @@
                         <tr>
                             <th>Name</th>
                             <th>Description</th>
+                            <th>Example</th>
                             <th>Required</th>
                         </tr>
                     </thead>
                     <tbody>
                     @for(queryParam: Parameter <- operation.request.queryParameters) {
-
                         <tr>
                             <td>@queryParam.name</td>
                             <td>@if(!queryParam.description.isNullOrEmpty) {
                                 @queryParam.description
                             }</td>
+                            <td>
+                            @if(queryParam.schema.isInstanceOf[ScalarShape]) {
+                                @for(example: Example <- queryParam.schema.asInstanceOf[ScalarShape].examples) {
+                                    <p>@example.value</p>
+                                }
+                            }
+                            </td>
                             <td>@{
                                 if(queryParam.required.value()) "Yes" else "No"
                             }</td>
                         </tr>
-
                     }
                     </tbody>
                 </table>
@@ -47,18 +53,24 @@
                     <tr>
                         <th>Name</th>
                         <th>Description</th>
+                        <th>Example</th>
                     </tr>
                 </thead>
                 <tbody>
                 @for(uriParam: Parameter <- endpoint.parameters) {
-
                     <tr>
                         <td>@uriParam.name</td>
                         <td>@if(!uriParam.description.isNullOrEmpty) {
                             @uriParam.description
                         }</td>
+                        <td>
+                        @if(uriParam.schema.isInstanceOf[ScalarShape]) {
+                            @for(example: Example <- uriParam.schema.asInstanceOf[ScalarShape].examples) {
+                                <p>@example.value</p>
+                            }
+                        }
+                        </td>
                     </tr>
-
                 }
                 </tbody>
             </table>
@@ -67,6 +79,16 @@
         @if(operation.request != null) {
             @for(requestBody: Payload <- operation.request.payloads) {
                 @if(requestBody.schema.isInstanceOf[NodeShape]) {
+                    @if(!requestBody.schema.asInstanceOf[NodeShape].examples.isEmpty) {
+                        <p><strong>@{
+                            if(requestBody.schema.asInstanceOf[NodeShape].examples.size == 1) "JSON Body Example" else "JSON Body Examples"
+                        }</strong></p>
+
+                        @for(example: Example <- requestBody.schema.asInstanceOf[NodeShape].examples) {
+                            <pre>@example.toJson</pre>
+                        }
+                    }
+
                     <h4>JSON Body Schema</h4>
                     <pre>@requestBody.schema.asInstanceOf[NodeShape].toJsonSchema</pre>
                 }
@@ -79,6 +101,16 @@
 
             @for(responseBody: Payload <- response.payloads) {
                 @if(responseBody.schema.isInstanceOf[NodeShape]) {
+                    @if(!responseBody.schema.asInstanceOf[NodeShape].examples.isEmpty) {
+                        <p><strong>@{
+                            if(responseBody.schema.asInstanceOf[NodeShape].examples.size == 1) "JSON Body Example" else "JSON Body Examples"
+                        }</strong></p>
+
+                        @for(example: Example <- responseBody.schema.asInstanceOf[NodeShape].examples) {
+                            <pre>@example.toJson</pre>
+                        }
+                    }
+
                     <p><strong>JSON Body Schema</strong></p>
                     <pre>@responseBody.schema.asInstanceOf[NodeShape].toJsonSchema</pre>
                 }

@@ -12,7 +12,7 @@ Add sbt-raml2md as a dependency in `project/plugins.sbt`:
 ```scala
 resolvers += Resolver.bintrayIvyRepo("peterhazell", "sbt-plugins")
 
-addSbtPlugin("peterhazell" %% "sbt-raml2md" % "0.1.0")
+addSbtPlugin("peterhazell" %% "sbt-raml2md" % "0.2.0")
 ```
 
 > sbt version 0.13.5 and scala version 2.12.2 or higher are required to use this plugin.
@@ -29,9 +29,8 @@ Separate markdown files will be produced containing the high level API documenta
 - Names and descriptions
 - Query parameter information
 - URI parameter information
+- Request body JSON examples
 - Request body JSON schemas
 - Response HTTP status codes
+- Response body JSON examples
 - Response body JSON schemas
-
-> Examples are not currently supported due to an issue with the underlying 
-RAML parser being used, the issue has been raised as a bug [here](https://github.com/raml-org/webapi-parser/issues/34).

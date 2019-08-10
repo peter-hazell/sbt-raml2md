@@ -6,4 +6,4 @@ case object NoRamlFilesFound extends Raml2MdResult
 
 case object Raml2MdSuccess extends Raml2MdResult
 
-case class Raml2MdError(errorMessage: String) extends Raml2MdResult
+case class Raml2MdFailure(message: String) extends Raml2MdResult

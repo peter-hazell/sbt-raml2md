@@ -8,6 +8,8 @@ import sbt.Keys.sLog
 import sbt.{Def, _}
 import webapi.{Raml10, WebApiBaseUnit, WebApiDocument}
 
+import scala.util.{Failure, Success, Try}
+
 object Raml2MdPlugin extends AutoPlugin {
   override val trigger: PluginTrigger = allRequirements
 
@@ -27,7 +29,7 @@ object Raml2MdPlugin extends AutoPlugin {
     raml2Md() match {
       case NoRamlFilesFound => log.info("No RAML files found")
       case Raml2MdSuccess => log.info("Successfully generated markdown files using RAML files")
-      case Raml2MdError(errorMessage) => log.error(s"Error generating markdown files using RAML files: $errorMessage")
+      case Raml2MdFailure(message) => log.error(s"Error generating markdown files using RAML files: $message")
     }
   }
 
@@ -37,7 +39,7 @@ object Raml2MdPlugin extends AutoPlugin {
     if (ramlFiles.isEmpty) {
       NoRamlFilesFound
     } else {
-      try {
+      Try {
         for (file <- ramlFiles) {
           val apiBaseUnit: WebApiBaseUnit = Raml10.parse(s"file://$file").get
           val apiDocument: WebApiDocument = apiBaseUnit.asInstanceOf[WebApiDocument]
@@ -45,11 +47,10 @@ object Raml2MdPlugin extends AutoPlugin {
 
           api2Md(api)
         }
-      } catch {
-        case e: Exception => Raml2MdError(e.getMessage)
+      } match {
+        case Success(_) => Raml2MdSuccess
+        case Failure(e) => Raml2MdFailure(e.getMessage)
       }
-
-      Raml2MdSuccess
     }
   }
 

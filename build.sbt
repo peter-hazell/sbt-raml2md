@@ -15,7 +15,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "sbt-raml2md",
     organization := "peterhazell",
-    version := "0.1.0",
+    version := "0.2.0",
     licenses += ("MIT", url("http://opensource.org/licenses/MIT")),
     sbtPlugin := true,
     bintrayVcsUrl := Some("git@github.com:peter-hazell/sbt-raml2md.git")
