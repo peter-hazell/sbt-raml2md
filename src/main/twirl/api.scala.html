@@ -7,6 +7,8 @@
 @import amf.client.model.domain.Response
 @import amf.client.model.domain.Payload
 @import amf.client.model.domain.NodeShape
+@import utils.FilenameFormatter._
+
 @(api: WebApi)
 
 <html>
@@ -24,7 +26,7 @@
             @for(endpoint: EndPoint <- api.endPoints) {
                 @for(operation: Operation <- endpoint.operations) {
                     <tr>
-                        <td>@operation.name</td>
+                        <td><a href="@formatMdFilename(operation.name.value)">@operation.name</a></td>
                         <td>@operation.method.value().toUpperCase</td>
                         <td>@endpoint.path</td>
                     </tr>

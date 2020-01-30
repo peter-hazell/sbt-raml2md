@@ -5,9 +5,8 @@ import raml2md.{Raml2MdFailure, Raml2MdPlugin, Raml2MdSuccess}
 
 class Raml2MdPluginSpec extends WordSpec with Matchers {
 
-  private def clearMdFiles(): Array[Boolean] = {
+  private def clearMdFiles(): Array[Boolean] =
     findMdFiles().map(_.delete())
-  }
 
   private def findMdFiles(): Array[File] = {
     def findFiles(d: File = new File(".")): Array[File] = {
@@ -24,12 +23,12 @@ class Raml2MdPluginSpec extends WordSpec with Matchers {
 
       val result = Raml2MdPlugin.raml2Md()
 
-      val outputFiles: Array[File] = findMdFiles()
+      val outputFiles:     Array[File]   = findMdFiles()
       val outputFilenames: Array[String] = outputFiles.map(_.getName)
 
-      result shouldBe Raml2MdSuccess
-      outputFiles.length shouldBe 2
-      outputFilenames.contains("test-api.md") shouldBe true
+      result                                        shouldBe Raml2MdSuccess
+      outputFiles.length                            shouldBe 2
+      outputFilenames.contains("test-api.md")       shouldBe true
       outputFilenames.contains("get-test-value.md") shouldBe true
 
       clearMdFiles()

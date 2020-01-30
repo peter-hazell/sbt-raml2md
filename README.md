@@ -7,12 +7,13 @@ readable markdown files that can be used as documentation for your RESTful APIs.
 
 ## Usage ##
 
-Add sbt-raml2md as a dependency in `project/plugins.sbt`:
+Update your `project/plugins.sbt` file to include the following:
 
 ```scala
 resolvers += Resolver.bintrayIvyRepo("peterhazell", "sbt-plugins")
+resolvers += "MuleSoftReleases" at "https://repository.mulesoft.org/nexus/content/repositories/public/"
 
-addSbtPlugin("peterhazell" %% "sbt-raml2md" % "0.2.0")
+addSbtPlugin("com.petehazell" %% "sbt-raml2md" % "0.3.0")
 ```
 
 > sbt version 0.13.5 and scala version 2.12.2 or higher are required to use this plugin.
